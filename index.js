@@ -1,14 +1,17 @@
- import express from 'express';
+import express from 'express';
 import fetch from 'node-fetch';
 import dotenv from 'dotenv';
+import cors from 'cors'; // <-- ajoute ceci
+
 dotenv.config();
 
 const app = express();
+app.use(cors()); // <-- active CORS pour tous les domaines
+
 const PORT = process.env.PORT || 3000;
 const BASE_URL = 'https://prod-kline-rest.supra.com/history';
 const API_KEY = process.env.SUPRA_API_KEY;
 
-// Mapping index -> trading_pair
 const PAIR_MAP = {
   0: 'btc_usdt',
   6000: 'tsla_usd',
