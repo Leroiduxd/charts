@@ -59,20 +59,25 @@ app.get('/history', async (req, res) => {
   const now = Date.now();
   const oneMonthAgo = now - 30 * 24 * 60 * 60 * 1000;
 
-  const url = ${BASE_URL}?trading_pair=${pairName}&startDate=${oneMonthAgo}&endDate=${now}&interval=${interval || 3600};
+  const url = `${BASE_URL}?trading_pair=${pairName}&startDate=${oneMonthAgo}&endDate=${now}&interval=${interval || 3600}`;
 
   try {
     const response = await fetch(url, {
       headers: { 'x-api-key': API_KEY }
     });
+
+    if (!response.ok) {
+      throw new Error(`Supra API error: ${response.status}`);
+    }
+
     const data = await response.json();
     res.json(data);
   } catch (err) {
-    console.error(err);
+    console.error('❌ Error fetching data from Supra:', err.message);
     res.status(500).json({ error: 'Failed to fetch data from Supra' });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(✅ Server running on port ${PORT});
+  console.log(`✅ Server running on port ${PORT}`);
 });
